@@ -6,10 +6,9 @@ owner = "prestodb"  # 仓库所有者
 repo = "presto"     # 仓库名称
 url = f"https://api.github.com/repos/{owner}/{repo}/pulls"  # API URL
 
-# GitHub 访问令牌
 headers = {
-    "Authorization": "Bearer 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",  # 替换为您的 GitHub 令牌
-    "Accept": "application/vnd.github.v3+json"
+    "A*u*t*h*o*r*i*zation": "**********",
+    "Accept": "************"
 }
 
 # 获取所有 PR 数据
