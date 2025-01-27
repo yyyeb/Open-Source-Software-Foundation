@@ -38,14 +38,12 @@ def process_issues_data(issues):
             continue
 
         created_at = pd.to_datetime(issue.get("created_at"))
-        comments = issue.get("comments", 0)
         first_reply_time = None
         response_time = None
 
         processed_data.append({
             "issue_number": issue.get("number"),
             "created_at": created_at,
-            "is_replied": comments > 0,
             "first_reply_time": first_reply_time,
             "response_time_hours": response_time
         })
@@ -57,51 +55,45 @@ def save_issues_to_csv(issues_data, filename):
         df = pd.DataFrame(issues_data)
         df.to_csv(filename, index=False, encoding='utf-8')
     except Exception as e:
-        print(f"保存 CSV 文件时出错: {e}")
+        print ( f"保存 CSV 文件时出错: { e } " )
 
-def analyze_issues_data(issues_data):
-    # 提取每个issue的创建时间
-    issue_dates = [issue.get('created_at') for issue in issues_data if issue.get('created_at')]
+defanalyze_issues_data  （问题数据）：
+    问题日期 = [问题。get ( 'created_at' )  for issues in issues_data if issues.获取（'创建于' ）]
+    日期 = pd. to_datetime (问题日期)
+    每个月的问题计数 = 日期。dt。月。value_counts ( )。排序索引( )
+    打印（每月问题计数）
 
-    # 将时间字符串转换为日期格式
-    dates = pd.to_datetime(issue_dates)
+    # 势差折线图
+    plt。图( Figsize= ( 10 , 6 ) )
+    每个月的问题数。绘图（种类= '线'，标记= 'o' ）
+    plt。xlabel ( '月份' )
+    plt。xticks （ issue_count_per_month.index ，旋转= 47 ）
+    plt。ylabel ( '问题数量' )
+    plt。title ( 'Presto GitHub 存储库中每月创建的问题数' )
+    plt。网格（true ）
 
-    # 提取年份并统计每年issue的数量
-    issue_count_per_year = dates.dt.year.value_counts().sort_index()
+    plt。tigh_layout （）
 
-    # 输出统计结果
-    print(issue_count_per_year)
+    ＃显示图表
+    plt。展示（）
 
-    # 绘制折线图
-    plt.figure(figsize=(10, 6))
-    issue_count_per_year.plot(kind='line', marker='o')
-    plt.title('Number of Issues Created per Year in Presto GitHub Repository')
-    plt.xlabel('Year')
-    plt.ylabel('Number of Issues')
-    plt.grid(True)
-    plt.xticks(issue_count_per_year.index, rotation=45)
-    plt.tight_layout()
+def  main （）：
+    repo_owner = “ prestodb”
+    repo_name = “ presto”
 
-    # 显示图表
-    plt.show()
+    ＃获取问题数据
+    问题= fetch_github_issues （ repo_owner，repo_name ）
 
-def main():
-    repo_owner = "prestodb"
-    repo_name = "presto"
+    如果问题：
+        essess_data = process_issues_data （问题）
+        如果essess_data：
+            save_issues_to_csv（ essess_data，“ presto_issues.csv” ）
+            Analyze_issues_data（ essess_data ）
+        别的：
+            打印（“未处理到有效的发行数据” ）
+    别的：
+        打印（“未能获取到发行数据，请检查配置或重试。” ）
+        打印（“如果问题仍然存在，可能是网络问题或链接不正确。请检查网页链接的合法性，并适当重试。” ）
 
-    # 获取 Issue 数据
-    issues = fetch_github_issues(repo_owner, repo_name)
-
-    if issues:
-        issues_data = process_issues_data(issues)
-        if issues_data:
-            save_issues_to_csv(issues_data, "presto_issues.csv")
-            analyze_issues_data(issues_data)
-        else:
-            print("未处理到有效的 Issue 数据")
-    else:
-        print("未能获取到 Issue 数据，请检查配置或重试。")
-        print("如果问题仍然存在，可能是网络问题或链接不正确。请检查网页链接的合法性，并适当重试。")
-
-if __name__ == "__main__":
-    main()
+如果__name__ == “ __ -main __”：
+    主要的（）
